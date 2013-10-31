@@ -109,8 +109,7 @@ class MenuBuilder extends ContainerAware
     public function build(FactoryInterface $factory)
     {
         $menu = $factory->createItem('root');
-        //Add default class for twitter bootstrap menu
-        $menu->setChildrenAttribute('class', 'nav');
+        $menu->setChildrenAttribute('class', 'nav'); //Add default class for twitter bootstrap menu
 
         foreach ($this->itemsConfiguration as $itemConfiguration) {
             if (count($itemConfiguration['roles']) && $this->isGranted($itemConfiguration['roles']) == false) {
@@ -139,10 +138,7 @@ class MenuBuilder extends ContainerAware
                         && $this->isGranted($subItemConfiguration['roles']) == false) {
                         continue;
                     }
-                    $subItem = $item->addChild(
-                        $subItemName,
-                        array('route' => $subItemConfiguration['route'])
-                    );
+                    $subItem = $item->addChild($subItemName, array('route' => $subItemConfiguration['route']));
                     $subItem->setExtra('safe_label', true);
                     $subItem->setLabel($this->getSubItemLabel($itemName, $subItemName, $this->withDescription));
                     $subItem->setLinkAttribute('class', 'nav-submenu nav-submenu-' . $itemName . '-' . $subItemName);
@@ -153,8 +149,7 @@ class MenuBuilder extends ContainerAware
             $item->setLinkAttribute('class', $class);
         }
 
-        //Menu is already build by configuration
-        //Add a custom event for extended needs
+        //Menu is already build by configuration : add a custom event for extended needs
         $this->eventDispatcher->dispatch(ConfigureMenuEvent::CONFIGURE, new ConfigureMenuEvent($factory, $menu));
 
         return $menu;
