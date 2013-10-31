@@ -86,7 +86,7 @@ class MenuBuilder extends ContainerAware
      */
     public function isGranted($attributes, $object = null)
     {
-        return $this->securityContext->isGranted($attributes, $object );
+        return $this->securityContext->isGranted($attributes, $object);
     }
 
     /**
