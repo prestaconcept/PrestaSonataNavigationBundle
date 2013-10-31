@@ -38,9 +38,10 @@ class PrestaSonataNavigationExtension extends Extension
     /**
      * Build Knp menu for administration
      *
-     * @param array $menuConfiguration
+     * @param ContainerBuilder $container
+     * @param array            $menuConfiguration
      */
-    protected function buildMenu($container, array $menuConfiguration)
+    protected function buildMenu(ContainerBuilder $container, array $menuConfiguration)
     {
         $menuBuilderDefinition = $container->getDefinition('presta_sonata_navigation.menu_builder');
         $menuBuilderDefinition->addMethodCall('setWithDescription', array($menuConfiguration['with_description']));
