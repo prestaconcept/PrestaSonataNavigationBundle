@@ -95,7 +95,7 @@ class MenuBuilder extends ContainerAware
      * @param  string $message
      * @return string
      */
-    protected function trans($message, array $parameters = array(), $domain = 'SonataNavigationBundle')
+    protected function trans($message, array $parameters = array(), $domain = 'PrestaSonataNavigationBundle')
     {
         return $this->translator->trans($message, $parameters, $domain);
     }
