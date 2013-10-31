@@ -1,6 +1,13 @@
 PrestaSonataNavigationBundle
 =============================
 
+[![Build Status](https://secure.travis-ci.org/prestaconcept/PrestaSonataNavigationBundle.png?branch=master)](http://travis-ci.org/prestaconcept/PrestaSonataNavigationBundle)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/prestaconcept/PrestaSonataNavigationBundle/badges/quality-score.png?s=00888f95880ed208af842bfd35eece9b993c0d62)](https://scrutinizer-ci.com/g/prestaconcept/PrestaSonataNavigationBundle/)
+[![Latest Stable Version](https://poser.pugx.org/presta/sonata-navigation-bundle/v/stable.png)](https://packagist.org/packages/presta/sonata-navigation-bundle)
+[![Total Downloads](https://poser.pugx.org/presta/sonata-navigation-bundle/downloads.png)](https://packagist.org/packages/presta/sonata-navigation-bundle)
+
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/08074de8-32da-42cb-b2e4-a273f893bd77/big.png)](https://insight.sensiolabs.com/projects/08074de8-32da-42cb-b2e4-a273f893bd77)
+[![knpbundles.com](http://knpbundles.com/prestaconcept/PrestaSonataNavigationBundle/badge)](http://knpbundles.com/prestaconcept/PrestaSonataNavigationBundle)
 
 #Overview #
 
