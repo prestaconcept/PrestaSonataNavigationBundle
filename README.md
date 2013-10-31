@@ -66,3 +66,7 @@ Released under the MIT License
 [5]: http://sandbox.prestacms.com/
 [6]: http://sandbox.prestacms.com/admin
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/prestaconcept/prestasonatanavigationbundle/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
