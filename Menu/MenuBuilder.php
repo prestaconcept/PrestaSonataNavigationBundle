@@ -90,6 +90,17 @@ class MenuBuilder extends ContainerAware
     }
 
     /**
+     * Translate a message
+     *
+     * @param  string $message
+     * @return string
+     */
+    protected function trans($message, array $parameters = array(), $domain = 'SonataNavigationBundle')
+    {
+        return $this->translator->trans($message, $parameters, $domain);
+    }
+
+    /**
      * Build administration main navigation
      *
      * @param  FactoryInterface $factory
@@ -105,27 +116,27 @@ class MenuBuilder extends ContainerAware
             if (count($itemConfiguration['roles']) && $this->isGranted($itemConfiguration['roles']) == false) {
                 continue;
             }
+            $hasChildren = (isset($itemConfiguration['children']) && count($itemConfiguration['children']));
 
             $itemName = $itemConfiguration['name'];
-            if (isset($itemConfiguration['children']) && count($itemConfiguration['children'])) {
+            if ($hasChildren) {
                 $item = $menu->addChild($itemName, array('uri' => '#'));
             } else {
                 $item = $menu->addChild($itemName, array('route' => $itemConfiguration['route']));
             }
 
-            $label = $this->translator->trans('navigation.' . $itemName . '.label', array(), 'admin');
             $class = 'nav-menu nav-menu-' . $itemName;
             $item->setExtra('safe_label', true);
-            if (isset($itemConfiguration['children']) && count($itemConfiguration['children'])) {
+            if ($hasChildren) {
                 //Handle dropdown item
-                $label .= ' <span class="caret"></span>';
                 $class .=  ' dropdown-toggle';
                 $item->setAttribute('class', 'dropdown');
                 $item->setLinkAttribute('data-toggle', 'dropdown');
                 $item->setChildrenAttribute('class', 'dropdown-menu');
 
                 foreach ($itemConfiguration['children'] as $subItemName => $subItemConfiguration) {
-                    if (count($subItemConfiguration['roles']) && $this->isGranted($subItemConfiguration['roles']) == false) {
+                    if (count($subItemConfiguration['roles'])
+                        && $this->isGranted($subItemConfiguration['roles']) == false) {
                         continue;
                     }
                     $subItem = $item->addChild(
@@ -133,16 +144,12 @@ class MenuBuilder extends ContainerAware
                         array('route' => $subItemConfiguration['route'])
                     );
                     $subItem->setExtra('safe_label', true);
-                    $subItemLabel = $this->translator->trans('navigation.' . $itemName . '.' . $subItemName . '.label', array(), 'admin');
-                    if ($this->withDescription) {
-                        $subItemLabel .= '<p>' . $this->translator->trans('navigation.' . $itemName . '.' . $subItemName . '.description', array(), 'admin') .'</p>';
-                    }
-                    $subItem->setLabel($subItemLabel);
+                    $subItem->setLabel($this->getSubItemLabel($itemName, $subItemName, $this->withDescription));
                     $subItem->setLinkAttribute('class', 'nav-submenu nav-submenu-' . $itemName . '-' . $subItemName);
                 }
             }
 
-            $item->setLabel($label);
+            $item->setLabel($this->getItemLabel($itemName, $hasChildren));
             $item->setLinkAttribute('class', $class);
         }
 
@@ -163,5 +170,44 @@ class MenuBuilder extends ContainerAware
     {
         $itemConfiguration['name']  = $itemName;
         $this->itemsConfiguration[] = $itemConfiguration;
+    }
+
+    /**
+     * Returns item label, made to be easily overridden
+     *
+     * @param  string  $itemName
+     * @param  boolean $hasChildren
+     * @return string
+     */
+    protected function getItemLabel($itemName, $hasChildren)
+    {
+        $label = $this->trans('navigation.' . $itemName . '.label');
+
+        if ($hasChildren) {
+            $label .= ' <span class="caret"></span>';
+        }
+
+        return $label;
+    }
+
+    /**
+     * Returns sub item label, made to be easily overridden
+     *
+     * @param  string  $itemName
+     * @param  string  $subItemName
+     * @param  boolean $withDescription
+     * @return string
+     */
+    public function getSubItemLabel($itemName, $subItemName, $withDescription)
+    {
+        $subItemLabel = $this->trans('navigation.' . $itemName . '.' . $subItemName . '.label');
+
+        if ($withDescription) {
+            $subItemLabel .= '<p>';
+            $subItemLabel .= $this->trans('navigation.' . $itemName . '.' . $subItemName . '.description');
+            $subItemLabel .= '</p>';
+        }
+
+        return $subItemLabel;
     }
 }
