@@ -30,7 +30,7 @@ class PrestaSonataNavigationExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        if (is_array($config['menu'])) {
+        if (isset($config['menu']) && is_array($config['menu'])) {
             $this->buildMenu($container, $config['menu']);
         }
     }
