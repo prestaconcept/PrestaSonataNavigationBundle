@@ -15,6 +15,9 @@ This bundle allow you to customize your Sonata Admin navigation.
 
 :speech_balloon: If you want to have some information about the project progression you can register to our [google group][3]
 
+## Issue tracker ##
+
+:clipboard: Issues are managed in [prestaconcept/open-source-management](https://github.com/prestaconcept/open-source-management) to centralize our open source activity.
 
 #Features #
 
@@ -56,10 +59,6 @@ Thanks to
 
 Released under the MIT License
 
-[3]: https://groups.google.com/forum/?hl=fr&fromgroups#!forum/prestacms-devs
-
-
-
 [2]: https://github.com/prestaconcept/prestacms-sandbox
 [3]: https://groups.google.com/forum/?hl=fr&fromgroups#!forum/prestacms-devs
 [4]: http://prestaconcept.github.io/presta-sonata-navigation/
@@ -67,6 +66,4 @@ Released under the MIT License
 [6]: http://sandbox.prestacms.com/admin
 
 
-
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/prestaconcept/prestasonatanavigationbundle/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
