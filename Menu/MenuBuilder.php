@@ -9,6 +9,7 @@
  */
 namespace Presta\SonataNavigationBundle\Menu;
 
+use Knp\Menu\MenuItem;
 use Presta\SonataNavigationBundle\Event\ConfigureMenuEvent;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
@@ -112,41 +113,7 @@ class MenuBuilder extends ContainerAware
         $menu->setChildrenAttribute('class', 'nav'); //Add default class for twitter bootstrap menu
 
         foreach ($this->itemsConfiguration as $itemConfiguration) {
-            if (count($itemConfiguration['roles']) && $this->isGranted($itemConfiguration['roles']) == false) {
-                continue;
-            }
-            $hasChildren = (isset($itemConfiguration['children']) && count($itemConfiguration['children']));
-
-            $itemName = $itemConfiguration['name'];
-            if ($hasChildren) {
-                $item = $menu->addChild($itemName, array('uri' => '#'));
-            } else {
-                $item = $menu->addChild($itemName, array('route' => $itemConfiguration['route']));
-            }
-
-            $class = 'nav-menu nav-menu-' . $itemName;
-            $item->setExtra('safe_label', true);
-            if ($hasChildren) {
-                //Handle dropdown item
-                $class .=  ' dropdown-toggle';
-                $item->setAttribute('class', 'dropdown');
-                $item->setLinkAttribute('data-toggle', 'dropdown');
-                $item->setChildrenAttribute('class', 'dropdown-menu');
-
-                foreach ($itemConfiguration['children'] as $subItemName => $subItemConfiguration) {
-                    if (count($subItemConfiguration['roles'])
-                        && $this->isGranted($subItemConfiguration['roles']) == false) {
-                        continue;
-                    }
-                    $subItem = $item->addChild($subItemName, array('route' => $subItemConfiguration['route']));
-                    $subItem->setExtra('safe_label', true);
-                    $subItem->setLabel($this->getSubItemLabel($itemName, $subItemName, $this->withDescription));
-                    $subItem->setLinkAttribute('class', 'nav-submenu nav-submenu-' . $itemName . '-' . $subItemName);
-                }
-            }
-
-            $item->setLabel($this->getItemLabel($itemName, $hasChildren));
-            $item->setLinkAttribute('class', $class);
+            $this->buildMenuItem($menu, $itemConfiguration);
         }
 
         //Menu is already build by configuration : add a custom event for extended needs
@@ -204,5 +171,61 @@ class MenuBuilder extends ContainerAware
         }
 
         return $subItemLabel;
+    }
+
+    /**
+     * Build main menu item
+     *
+     * @param MenuItem  $menu
+     * @param array     $itemConfiguration
+     */
+    protected function buildMenuItem(MenuItem $menu, array $itemConfiguration)
+    {
+        if (count($itemConfiguration['roles']) && $this->isGranted($itemConfiguration['roles']) == false) {
+            return;
+        }
+        $hasChildren = (isset($itemConfiguration['children']) && count($itemConfiguration['children']));
+
+        $itemName = $itemConfiguration['name'];
+        if ($hasChildren) {
+            $item = $menu->addChild($itemName, array('uri' => '#'));
+        } else {
+            $item = $menu->addChild($itemName, array('route' => $itemConfiguration['route']));
+        }
+
+        $class = 'nav-menu nav-menu-' . $itemName;
+        $item->setExtra('safe_label', true);
+        if ($hasChildren) {
+            $class .=  ' dropdown-toggle'; //Handle dropdown item
+            $item->setAttribute('class', 'dropdown');
+            $item->setLinkAttribute('data-toggle', 'dropdown');
+            $item->setChildrenAttribute('class', 'dropdown-menu');
+
+            $this->buildMenuSubItems($item, $itemConfiguration['children']);
+        }
+
+        $item->setLabel($this->getItemLabel($itemName, $hasChildren));
+        $item->setLinkAttribute('class', $class);
+    }
+
+    /**
+     * Build menu subitems
+     *
+     * @param MenuItem $item
+     * @param array    $childrenConfiguration
+     */
+    protected function buildMenuSubItems(MenuItem $item, array $childrenConfiguration)
+    {
+        $itemName= $item->getName();
+        foreach ($childrenConfiguration as $subItemName => $subItemConfiguration) {
+            if (count($subItemConfiguration['roles'])
+                && $this->isGranted($subItemConfiguration['roles']) == false) {
+                continue;
+            }
+            $subItem = $item->addChild($subItemName, array('route' => $subItemConfiguration['route']));
+            $subItem->setExtra('safe_label', true);
+            $subItem->setLabel($this->getSubItemLabel($itemName, $subItemName, $this->withDescription));
+            $subItem->setLinkAttribute('class', 'nav-submenu nav-submenu-' . $itemName . '-' . $subItemName);
+        }
     }
 }
